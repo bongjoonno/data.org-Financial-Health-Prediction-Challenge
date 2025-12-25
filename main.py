@@ -1,4 +1,4 @@
-from .tests import test_cross_validate_models
+from tests import test_cross_validate_models
 
 def main():
     return test_cross_validate_models()
