@@ -10,7 +10,6 @@ def load_all_models():
                                 random_seed=42,
                                 thread_count=1
                                 ),
-            
             'using_test_set': False, 
             'one_hot_encode_categoricals': True, 
             'scale_x' : True, 

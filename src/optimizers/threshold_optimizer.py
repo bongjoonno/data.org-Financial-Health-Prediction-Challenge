@@ -1,13 +1,18 @@
 from imports import np, f1_score
+from src.data_prep import clean_data, train_df, split_data_k_folds
 
 class ThresholdOptimizer:
     n_folds = 5
     
     @staticmethod
     def get_best_thresholds(model):
-        x, y = make_x_and_y(df, clean_data_args)
+        df = clean_data(train_df, **clean_data_args)
         
-        folds = split_k_folds(x, y, ThresholdOptimizer.n_folds)
+        x = df.drop(columns='Target')
+        y = df['Target']
+
+        
+        folds = split_data_k_folds(x, y, ThresholdOptimizer.n_folds)
 
         avg_threshes = [[], [], []]
         for fold in folds:
