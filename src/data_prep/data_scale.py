@@ -1,6 +1,13 @@
 from imports import StandardScaler
 
-def scale_data(x_train, *data_to_be_scaled_by_training_fit, columns_to_scale):
+columns_to_scale = ['owner_age', 
+                 'personal_income', 
+                 'business_expenses', 
+                 'business_turnover', 
+                 'business_age_years', 
+                 'business_age_months']
+
+def scale_data(x_train, *data_to_be_scaled_by_training_fit):
     scaler = StandardScaler()
 
     x_train = x_train.copy()

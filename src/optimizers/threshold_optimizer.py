@@ -1,12 +1,17 @@
 from imports import np, f1_score
-from src.data_prep import clean_data, train_df, split_data_k_folds
+from src.data_prep import clean_data, train_df, split_data_k_folds, scale_data
 
 class ThresholdOptimizer:
     n_folds = 5
     
     @staticmethod
     def get_best_thresholds(model):
-        df = clean_data(train_df, **clean_data_args)
+        model = model['model']
+        one_hot_encode_categoricals = model['one_hot_encode_categoricals']
+        scale_x = model['scale_x']
+        
+        
+        df = clean_data(train_df, one_hot_encode_categoricals)
         
         x = df.drop(columns='Target')
         y = df['Target']
@@ -19,7 +24,7 @@ class ThresholdOptimizer:
             x_train, y_train, x_val, y_val = fold
 
             if scale_x:
-                x_train, x_val = scale_data(x_train, x_val, columns_to_scale=cols_to_scale)
+                x_train, x_val = scale_data(x_train, x_val)
 
             model.fit(x_train, y_train)
 
