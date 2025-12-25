@@ -5,7 +5,7 @@ model_packages = [
                         learning_rate=0.1,
                         depth=6,
                         loss_function='MultiClass',
-                        verbose=False,
+                        verbose=0,
                         random_seed=42,
                         thread_count=1
                         ),
@@ -20,7 +20,7 @@ model_packages = [
                         learning_rate=0.1,
                         depth=6,
                         loss_function='MultiClass',
-                        verbose=False,
+                        verbose=0,
                         random_seed=42,
                         thread_count=1
                         ),

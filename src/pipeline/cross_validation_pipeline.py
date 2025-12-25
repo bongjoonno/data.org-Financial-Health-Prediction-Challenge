@@ -19,6 +19,8 @@ class CrossValPipeline:
             
         x = df.drop(columns='Target')
         y = df['Target']
+        print(x)
+        print(y)
             
         folds = split_data_k_folds(x, y, CrossValPipeline.n_folds)
             
