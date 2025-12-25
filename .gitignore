@@ -1,1 +1,3 @@
-catboost_info/
+**/catboost_info/
+**/__pycache__/
+env/
