@@ -1,4 +1,4 @@
+__pycache__/
+*.pyc
 catboost_info/
 env/
-tests/
-data/
