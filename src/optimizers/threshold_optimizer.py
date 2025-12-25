@@ -6,10 +6,10 @@ class ThresholdOptimizer:
     n_folds = 5
     
     @staticmethod
-    def get_best_thresholds(model):
-        model = model['model']
-        one_hot_encode_categoricals = model['one_hot_encode_categoricals']
-        scale_x = model['scale_x']
+    def get_best_thresholds(model_package: dict):
+        model = model_package['model']
+        one_hot_encode_categoricals = model_package['one_hot_encode_categoricals']
+        scale_x = model_package['scale_x']
         
         
         df = clean_data(train_df, one_hot_encode_categoricals)
@@ -45,7 +45,7 @@ class ThresholdOptimizer:
 
             y_pred = make_preds_with_thresholds(y_pred, thresholds)
 
-        model['thresholds'] = [np.mean(threshes) for threshes in avg_threshes]
+        model_package['thresholds'] = [np.mean(threshes) for threshes in avg_threshes]
 
     @staticmethod
     def optimize_threshold(probs_list, y_true, num_classes):
