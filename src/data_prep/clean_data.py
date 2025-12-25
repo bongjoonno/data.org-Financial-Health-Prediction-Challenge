@@ -98,5 +98,8 @@ def clean_data(df, one_hot_encode_categoricals: bool = True):
     for column in df.columns:
       if df[column].dtype == object and column not in ['Target', 'ID']:
         df[column] = df[column].astype('category').cat.codes
+  
+
+  df['Target'] = df['Target'].map({'Low' : 0, 'Medium' : 1, 'High' : 2})
 
   return df

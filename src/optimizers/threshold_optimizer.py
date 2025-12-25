@@ -16,11 +16,11 @@ class ThresholdOptimizer:
         
         x = df.drop(columns='Target')
         y = df['Target']
-
         
         folds = split_data_k_folds(x, y, ThresholdOptimizer.n_folds)
 
         avg_threshes = [[], [], []]
+        
         for fold in folds:
             x_train, y_train, x_val, y_val = fold
 
@@ -32,10 +32,10 @@ class ThresholdOptimizer:
    
             y_pred = model.predict(x_val, prediction_type='Probability')
 
-            optim = ThresholdOptimizer.optimize_threshold(y_pred, y_val, 3)
+            classes_thresh_dict = ThresholdOptimizer.optimize_threshold(y_pred, y_val, 3)
             thresholds = []
 
-            for k, v in optim.items():
+            for k, v in classes_thresh_dict.items():
                 max_f1_thresh_pair = sorted(v.items(), key=lambda pair: pair[1], reverse=True)[0]
                 max_f1_thresh = max_f1_thresh_pair[0]
 

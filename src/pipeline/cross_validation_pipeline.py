@@ -19,15 +19,11 @@ class CrossValPipeline:
             
         x = df.drop(columns='Target')
         y = df['Target']
-        print(x)
-        print(y)
             
         folds = split_data_k_folds(x, y, CrossValPipeline.n_folds)
             
         f1s_per_class = []
         avg_f1s = []
-
-        avg_threshes = [[], [], []]
         
         for fold in folds:
             x_train, y_train, x_val, y_val = fold
@@ -43,7 +39,6 @@ class CrossValPipeline:
                 threshold_optimizer.get_best_thresholds(model_package)
                 
                 thresholds = model_package['thresholds']
-
                 y_pred = make_preds_with_thresholds(y_pred, thresholds)
             else:
                 y_pred = model.predict(x_val).flatten()
