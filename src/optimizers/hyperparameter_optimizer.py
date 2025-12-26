@@ -1,5 +1,5 @@
 from imports import np, f1_score, CatBoostClassifier
-from constants import RANDOM_SEED, DEFAULT_EPOCHS, DEFAULT_LR, DEFAULT_EARLY_STOPPING_ROUNDS, DEFAULT_TREE_DEPTH
+from constants import RANDOM_SEED, MAX_EPOCHS, DEFAULT_LR, EARLY_STOPPING_ROUNDS, DEFAULT_TREE_DEPTH, LEARNING_RATES
 
 from src.data_prep import clean_data, train_df, split_data_k_folds, scale_data
 from src.prediction_creation import make_preds_with_thresholds
@@ -21,12 +21,12 @@ class HyperParamOptimizer:
         
         epochs_learning_rate_pairs: dict[tuple, float] = {}
         
-        learning_rates = np.random.uniform(0.00001, 0.1, 3)
+        learning_rates = np.random.uniform(0.00001, 0.1, LEARNING_RATES)
         
         for lr in learning_rates:
-            model = CatBoostClassifier(iterations=DEFAULT_EPOCHS,
+            model = CatBoostClassifier(iterations=MAX_EPOCHS,
                                        learning_rate=lr,
-                                       early_stopping_rounds=DEFAULT_EARLY_STOPPING_ROUNDS,
+                                       early_stopping_rounds=EARLY_STOPPING_ROUNDS,
                                        depth=DEFAULT_TREE_DEPTH,
                                        loss_function='MultiClass',
                                        verbose=0,
@@ -50,7 +50,7 @@ class HyperParamOptimizer:
 
                 model = CatBoostClassifier(iterations=best_iteration,
                                        learning_rate=lr,
-                                       early_stopping_rounds=DEFAULT_EARLY_STOPPING_ROUNDS,
+                                       early_stopping_rounds=EARLY_STOPPING_ROUNDS,
                                        depth=DEFAULT_TREE_DEPTH,
                                        loss_function='MultiClass',
                                        verbose=0,
@@ -73,7 +73,7 @@ class HyperParamOptimizer:
         
     @staticmethod
     def optimize_tree_depth(model_package: dict):
-        best_epochs = model_package.get('best_epochs', DEFAULT_EPOCHS)
+        best_epochs = model_package.get('best_epochs', MAX_EPOCHS)
         best_lr = model_package.get('best_lr', DEFAULT_LR)
     
         one_hot_encode_categoricals = model_package['one_hot_encode_categoricals']
@@ -91,7 +91,7 @@ class HyperParamOptimizer:
         for depth in depths:
             optimized_model = CatBoostClassifier(iterations=best_epochs,
                                                  learning_rate=best_lr,
-                                                 early_stopping_rounds=DEFAULT_EARLY_STOPPING_ROUNDS,
+                                                 early_stopping_rounds=EARLY_STOPPING_ROUNDS,
                                                  depth=depth,
                                                  loss_function='MultiClass',
                                                  verbose=0,
@@ -119,13 +119,13 @@ class HyperParamOptimizer:
             
     @staticmethod
     def get_best_thresholds(model_package: dict):
-        best_epochs = model_package.get('best_epochs', DEFAULT_EPOCHS)
+        best_epochs = model_package.get('best_epochs', MAX_EPOCHS)
         best_lr = model_package.get('best_lr', DEFAULT_LR)
         best_tree_depth = model_package.get('best_tree_depth', DEFAULT_TREE_DEPTH)
         
         optimized_model = CatBoostClassifier(iterations=best_epochs,
                                              learning_rate=best_lr,
-                                             early_stopping_rounds=DEFAULT_EARLY_STOPPING_ROUNDS,
+                                             early_stopping_rounds=EARLY_STOPPING_ROUNDS,
                                              depth=best_tree_depth,
                                              loss_function='MultiClass',
                                              verbose=0,

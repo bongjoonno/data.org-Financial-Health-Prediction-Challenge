@@ -2,7 +2,8 @@ from imports import Path
 
 DATA_PATH = Path(r'D:\code\repos\data.org-Financial-Health-Prediction-Challenge\data')
 RANDOM_SEED = 42
-DEFAULT_EPOCHS = 10
+MAX_EPOCHS = 1000
 DEFAULT_LR = 0.05
-DEFAULT_EARLY_STOPPING_ROUNDS = 1
-DEFAULT_TREE_DEPTH = 4
+EARLY_STOPPING_ROUNDS = 50
+DEFAULT_TREE_DEPTH = 6
+LEARNING_RATES = 30
