@@ -8,3 +8,4 @@ def test_cross_validate_models():
         pipeline.tune_hyperparameters(model_package)
         avg_f1 = pipeline.cross_validate_optimized_model(model_package)
         print(avg_f1)
+        print(model_package)
