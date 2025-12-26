@@ -1,8 +1,9 @@
 from imports import CatBoostClassifier
 
 model_packages = [
-        {'model' : CatBoostClassifier(iterations=100,
-                        learning_rate=0.1,
+        {'model' : CatBoostClassifier(iterations=500,
+                        learning_rate=0.05,
+                        early_stopping_rounds=100,
                         depth=6,
                         loss_function='MultiClass',
                         verbose=0,
@@ -16,8 +17,9 @@ model_packages = [
         'thresholds' : None,
         },
 
-        {'model' :CatBoostClassifier(iterations=100,
-                        learning_rate=0.1,
+        {'model' :CatBoostClassifier(iterations=500,
+                        learning_rate=0.05,
+                        early_stopping_rounds=100,             
                         depth=6,
                         loss_function='MultiClass',
                         verbose=0,
@@ -32,4 +34,3 @@ model_packages = [
         'thresholds' : None
         }
 ]
-    
