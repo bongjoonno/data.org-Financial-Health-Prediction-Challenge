@@ -11,7 +11,6 @@ if __name__ == '__main__':
 '''
 TO-DO
 
-1. Remove Randomness and Set Seeds
 2. Optimize Catboost LR and dpeth
 3. Add XGBoost Model
 4. Add TABPFN Model

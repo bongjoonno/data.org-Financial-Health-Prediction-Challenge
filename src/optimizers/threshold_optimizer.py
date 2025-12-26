@@ -70,7 +70,7 @@ class HyperParamOptimizer:
         return classes_thresh_dict
 
     @staticmethod
-    def optimize_epochs(model_package: dict):
+    def optimize_epochs_and_learning_rate(model_package: dict):
         model = model_package['model']
         one_hot_encode_categoricals = model_package['one_hot_encode_categoricals']
         scale_x = model_package['scale_x']
@@ -82,17 +82,31 @@ class HyperParamOptimizer:
             
         folds = split_data_k_folds(x, y, HyperParamOptimizer.n_folds)
         
-        best_iterations = []
+        epochs_learning_rate_pairs: dict[tuple, float] = {}
         
-        for fold in folds:
-            x_train, y_train, x_val, y_val = fold
-
-            if scale_x:
-                x_train, x_val = scale_data(x_train, x_val)
-
-            model.fit(x_train, y_train,
-                        eval_set=(x_val, y_val))
-
-            best_iterations.append(model.get_best_iteration())
+        learning_rates = np.random.uniform(0.00001, 0.1, 10)
         
-        model_package['best_epochs'] = round(np.mean(best_iterations))
+        for lr in learning_rates:
+            for fold in folds:
+                x_train, y_train, x_val, y_val = fold
+
+                if scale_x:
+                    x_train, x_val = scale_data(x_train, x_val)
+
+                model.fit(x_train, y_train,
+                          learning_rate = lr,
+                          eval_set=(x_val, y_val))
+
+                best_iteration = model.get_best_iteration()
+            
+                model.fit(x_train, y_train, 
+                          iterations = best_iteration,
+                          learning_rate = lr)
+                
+                y_pred = model.predict(x_val, y_val).flatten()
+                macro_f1 = f1_score(y_val, y_pred, average='Macro')
+                
+                epochs_learning_rate_pairs[(best_iteration, lr)] = macro_f1
+        
+        for pair, f1 in epochs_learning_rate_pairs.items():
+            print(pair, f1)
