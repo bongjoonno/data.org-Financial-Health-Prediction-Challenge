@@ -70,9 +70,6 @@ class HyperParamOptimizer:
 
         
         model_package['best_epochs'], model_package['best_lr'] = max(epochs_learning_rate_pairs, key=epochs_learning_rate_pairs.get)
-        for pair, f1 in epochs_learning_rate_pairs.items():
-            print(pair, f1)
-        print(model_package)
         
     @staticmethod
     def optimize_tree_depth(model_package: dict):
@@ -108,11 +105,6 @@ class HyperParamOptimizer:
 
                 if scale_x:
                     x_train, x_val = scale_data(x_train, x_val)
-
-                optimized_model.fit(x_train, y_train,
-                          eval_set=(x_val, y_val))
-
-                best_iteration = optimized_model.get_best_iteration()
                 
                 optimized_model.fit(x_train, y_train)
 
@@ -124,9 +116,6 @@ class HyperParamOptimizer:
             depths[depth] = fold_average_f1
         
         model_package['best_tree_depth'] = max(depths, key=depths.get)
-        for depth, f1 in depths.items():
-            print(depth, f1)
-        print(model_package)
             
     @staticmethod
     def get_best_thresholds(model_package: dict):
@@ -145,7 +134,6 @@ class HyperParamOptimizer:
         
         one_hot_encode_categoricals = model_package['one_hot_encode_categoricals']
         scale_x = model_package['scale_x']
-        
         
         df = clean_data(train_df, one_hot_encode_categoricals)
         
