@@ -45,7 +45,7 @@ class ThresholdOptimizer:
 
             y_pred = make_preds_with_thresholds(y_pred, thresholds)
 
-        return [np.mean(threshes) for threshes in avg_threshes]
+        model_package['thresholds'] = [np.mean(threshes) for threshes in avg_threshes]
 
     @staticmethod
     def optimize_threshold(probs_list, y_true, num_classes):

@@ -53,7 +53,8 @@ class CrossValPipeline:
             best_iterations.append(model.get_best_iteration())
         
         thresholds_all_folds = np.array(thresholds_all_folds)
-        mean_per_class_thresholds = np.column_stack([thresholds_all_folds[:, j] for j in range(thresholds_all_folds.shape[1])]).tolist()
+        mean_per_class_thresholds = np.column_stack([thresholds_all_folds[j, :] for j in range(thresholds_all_folds.shape[1])]).tolist()
+        
         print(thresholds_all_folds)
         print(mean_per_class_thresholds)
         
