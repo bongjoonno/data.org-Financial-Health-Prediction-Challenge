@@ -1,10 +1,128 @@
 from imports import np, f1_score, CatBoostClassifier
+from constants import RANDOM_SEED, DEFAULT_EARLY_STOPPING_ROUNDS, DEFAULT_TREE_DEPTH
+
 from src.data_prep import clean_data, train_df, split_data_k_folds, scale_data
 from src.prediction_creation import make_preds_with_thresholds
 
 class HyperParamOptimizer:
     n_folds = 5
     
+    @staticmethod
+    def optimize_epochs_and_learning_rate(model_package: dict):
+        one_hot_encode_categoricals = model_package['one_hot_encode_categoricals']
+        scale_x = model_package['scale_x']
+    
+        df = clean_data(train_df, one_hot_encode_categoricals)
+                
+        x = df.drop(columns='Target')
+        y = df['Target']
+            
+        folds = split_data_k_folds(x, y, HyperParamOptimizer.n_folds)
+        
+        epochs_learning_rate_pairs: dict[tuple, float] = {}
+        
+        learning_rates = np.random.uniform(0.00001, 0.1, 10)
+        
+        for lr in learning_rates:
+            model = CatBoostClassifier(iterations=10,
+                                       learning_rate=lr,
+                                       early_stopping_rounds=DEFAULT_EARLY_STOPPING_ROUNDS,
+                                       depth=DEFAULT_TREE_DEPTH,
+                                       loss_function='MultiClass',
+                                       verbose=0,
+                                       random_seed=RANDOM_SEED,
+                                       thread_count=1)
+            fold_epochs = []
+            fold_f1s = []
+            
+            for fold in folds:
+                x_train, y_train, x_val, y_val = fold
+
+                if scale_x:
+                    x_train, x_val = scale_data(x_train, x_val)
+
+                model.fit(x_train, y_train,
+                          eval_set=(x_val, y_val))
+
+                best_iteration = model.get_best_iteration()
+                
+                fold_epochs.append(best_iteration)
+
+                model = CatBoostClassifier(iterations=best_iteration,
+                                       learning_rate=lr,
+                                       early_stopping_rounds=DEFAULT_EARLY_STOPPING_ROUNDS,
+                                       depth=DEFAULT_TREE_DEPTH,
+                                       loss_function='MultiClass',
+                                       verbose=0,
+                                       random_seed=RANDOM_SEED,
+                                       thread_count=1)
+                
+                model.fit(x_train, y_train)
+
+                y_pred = model.predict(x_val).flatten()
+                macro_f1 = f1_score(y_val, y_pred, average='macro')
+                fold_f1s.append(macro_f1)
+            
+            fold_average_epochs = round(np.mean(fold_epochs))
+            fold_average_f1 = np.mean(fold_f1s)
+            
+            epochs_learning_rate_pairs[(fold_average_epochs, lr)] = fold_average_f1
+
+        
+        model_package['best_epochs'], model_package['best_lr'] = max(epochs_learning_rate_pairs, key=epochs_learning_rate_pairs.get)
+    
+    @staticmethod
+    def optimize_tree_depth(model_package: dict):
+        best_epochs = model_package.get('best_epochs', 500)
+        best_lr = model_package.get('best_lr', 0.05)
+    
+        one_hot_encode_categoricals = model_package['one_hot_encode_categoricals']
+        scale_x = model_package['scale_x']
+        
+        df = clean_data(train_df, one_hot_encode_categoricals)
+                
+        x = df.drop(columns='Target')
+        y = df['Target']
+            
+        folds = split_data_k_folds(x, y, HyperParamOptimizer.n_folds)
+        
+        depths = {depth: None for depth in range(3, 10)}
+        
+        for depth in depths:
+            optimized_model = CatBoostClassifier(iterations=best_epochs,
+                                       learning_rate=best_lr,
+                                       early_stopping_rounds=DEFAULT_EARLY_STOPPING_ROUNDS,
+                                       depth=depth,
+                                       loss_function='MultiClass',
+                                       verbose=0,
+                                       random_seed=RANDOM_SEED,
+                                       thread_count=1)
+            
+            fold_f1s = []
+            
+            for fold in folds:
+                x_train, y_train, x_val, y_val = fold
+
+                if scale_x:
+                    x_train, x_val = scale_data(x_train, x_val)
+
+                optimized_model.fit(x_train, y_train,
+                          eval_set=(x_val, y_val))
+
+                best_iteration = optimized_model.get_best_iteration()
+                
+                optimized_model.fit(x_train, y_train)
+
+                y_pred = optimized_model.predict(x_val).flatten()
+                macro_f1 = f1_score(y_val, y_pred, average='macro')
+                fold_f1s.append(macro_f1)
+            
+            fold_average_f1 = np.mean(fold_f1s)
+            depths[depth] = fold_average_f1
+        
+        model_package['best_depth'] = max(depths, key=depths.get)
+        print(model_package)
+            
     @staticmethod
     def get_best_thresholds(model_package: dict):
         model = model_package['model']
@@ -68,58 +186,3 @@ class HyperParamOptimizer:
                 classes_thresh_dict[i][threshold] = f1
 
         return classes_thresh_dict
-
-    @staticmethod
-    def optimize_epochs_and_learning_rate(model_package: dict):
-        one_hot_encode_categoricals = model_package['one_hot_encode_categoricals']
-        scale_x = model_package['scale_x']
-    
-        df = clean_data(train_df, one_hot_encode_categoricals)
-                
-        x = df.drop(columns='Target')
-        y = df['Target']
-            
-        folds = split_data_k_folds(x, y, HyperParamOptimizer.n_folds)
-        
-        epochs_learning_rate_pairs: dict[tuple, float] = {}
-        
-        learning_rates = np.random.uniform(0.00001, 0.1, 10)
-        
-        for lr in learning_rates:
-            model = CatBoostClassifier(iterations=10,
-                                       learning_rate=lr,
-                                       early_stopping_rounds=5,
-                                       depth=6,
-                                       loss_function='MultiClass',
-                                       verbose=0,
-                                       random_seed=42,
-                                       thread_count=1)
-             
-            for fold in folds:
-                x_train, y_train, x_val, y_val = fold
-
-                if scale_x:
-                    x_train, x_val = scale_data(x_train, x_val)
-
-                model.fit(x_train, y_train,
-                          eval_set=(x_val, y_val))
-
-                best_iteration = model.get_best_iteration()
-
-                model = CatBoostClassifier(iterations=best_iteration,
-                                       learning_rate=lr,
-                                       early_stopping_rounds=5,
-                                       depth=6,
-                                       loss_function='MultiClass',
-                                       verbose=0,
-                                       random_seed=42,
-                                       thread_count=1)
-                
-                model.fit(x_train, y_train)
-
-                y_pred = model.predict(x_val).flatten()
-                macro_f1 = f1_score(y_val, y_pred, average='macro')
-                
-                epochs_learning_rate_pairs[(best_iteration, lr)] = macro_f1
-        
-        model_package['best_epochs'], model_package['best_lr'] = max(epochs_learning_rate_pairs, key=epochs_learning_rate_pairs.get)
