@@ -11,10 +11,14 @@ class CrossValPipeline:
     @staticmethod
     def tune_hyperparameters(model_package: dict):
         optimize_epochs_and_lr = model_package['optimize_epochs_and_lr']
+        optimize_tree_depth = model_package['optimize_tree_depth']
         optimize_thresh = model_package['optimize_thresh']
                 
         if optimize_epochs_and_lr:
             hyperparam_optimizer.optimize_epochs_and_learning_rate(model_package)
+        
+        if optimize_tree_depth:
+            hyperparam_optimizer.optimize_tree_depth(model_package)
         
         if optimize_thresh:
             hyperparam_optimizer.get_best_thresholds(model_package)

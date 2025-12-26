@@ -6,10 +6,10 @@ model_packages = [
          'scale_x' : True, 
          'optimize_epochs_and_lr' : True,
          'optimize_tree_depth' : True,
-         'optimize_thresh' : False,
-         'thresholds' : None,
+         'optimize_thresh' : True,
          'best_epochs' : None,
          'best_lr' : None,
          'best_tree_depth': None,
+         'thresholds' : None,
          },
 ]
