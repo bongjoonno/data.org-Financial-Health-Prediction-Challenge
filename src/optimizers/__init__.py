@@ -1,1 +1,1 @@
-from .threshold_optimizer import ThresholdOptimizer
+from .threshold_optimizer import HyperParamOptimizer

@@ -13,8 +13,10 @@ model_packages = [
         'using_test_set': False, 
         'one_hot_encode_categoricals': True, 
         'scale_x' : True, 
-        'optimize_thresh' : True,
+        'optimize_epochs' : True,
+        'optimize_thresh' : False,
         'thresholds' : None,
+        'best_epochs' : None
         },
 
         {'model' :CatBoostClassifier(iterations=100,
@@ -30,7 +32,9 @@ model_packages = [
         'using_test_set': False, 
         'one_hot_encode_categoricals': True,
         'scale_x' : True, 
+        'optimize_epochs' : False,
         'optimize_thresh' : False,
-        'thresholds' : None
+        'thresholds' : None,
+        'best_epochs' : None
         }
 ]
