@@ -25,6 +25,7 @@ class CrossValPipeline:
         f1s_per_class = []
         avg_f1s = []
         best_iterations = []
+        thresholds_all_folds = []
         
         for fold in folds:
             x_train, y_train, x_val, y_val = fold
@@ -37,10 +38,10 @@ class CrossValPipeline:
 
             if optimize_thresh:
                 y_pred = model.predict(x_val, prediction_type='Probability')
-
-                threshold_optimizer.get_best_thresholds(model_package)
                 
-                thresholds = model_package['thresholds']
+                thresholds = threshold_optimizer.get_best_thresholds(model_package)
+                thresholds_all_folds.append(thresholds)
+                
                 y_pred = make_preds_with_thresholds(y_pred, thresholds)
             else:
                 y_pred = model.predict(x_val).flatten()
@@ -50,5 +51,10 @@ class CrossValPipeline:
             avg_f1s.append(np.mean(f1_per_class))
             
             best_iterations.append(model.get_best_iteration())
-
+        
+        thresholds_all_folds = np.array(thresholds_all_folds)
+        mean_per_class_thresholds = np.column_stack([thresholds_all_folds[:, j] for j in range(thresholds_all_folds.shape[1])]).tolist()
+        print(thresholds_all_folds)
+        print(mean_per_class_thresholds)
+        
         return np.mean(avg_f1s)
