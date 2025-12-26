@@ -24,6 +24,7 @@ class CrossValPipeline:
             
         f1s_per_class = []
         avg_f1s = []
+        best_iterations = []
         
         for fold in folds:
             x_train, y_train, x_val, y_val = fold
@@ -31,7 +32,8 @@ class CrossValPipeline:
             if scale_x:
                 x_train, x_val = scale_data(x_train, x_val)
 
-            model.fit(x_train, y_train)
+            model.fit(x_train, y_train,
+                      eval_set=(x_val, y_val))
 
             if optimize_thresh:
                 y_pred = model.predict(x_val, prediction_type='Probability')
@@ -46,5 +48,7 @@ class CrossValPipeline:
             f1_per_class = f1_score(y_val, y_pred, average=None)
             f1s_per_class.append(f1_per_class)
             avg_f1s.append(np.mean(f1_per_class))
+            
+            best_iterations.append(model.get_best_iteration())
 
         return np.mean(avg_f1s)
