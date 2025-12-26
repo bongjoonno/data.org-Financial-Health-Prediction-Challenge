@@ -122,4 +122,4 @@ class HyperParamOptimizer:
                 
                 epochs_learning_rate_pairs[(best_iteration, lr)] = macro_f1
         
-        print(max(epochs_learning_rate_pairs, key=epochs_learning_rate_pairs.get))
+        model_package['best_epochs'], model_package['best_lr'] = max(epochs_learning_rate_pairs, key=epochs_learning_rate_pairs.get)
