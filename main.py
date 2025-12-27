@@ -11,6 +11,7 @@ if __name__ == '__main__':
 '''
 TO-DO
 
+3. tweak hyperparameters of TABPFN
 3. Add XGBoost Model
 5. Do Feature Engineering
 6. 
