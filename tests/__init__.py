@@ -1,1 +1,2 @@
 from .cross_validate_models import test_cross_validate_models
+from .make_test_predictions import test_make_predictions

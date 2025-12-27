@@ -1,7 +1,7 @@
-from tests import test_cross_validate_models
+from tests import test_cross_validate_models, test_make_predictions
 
 def main():
-    return test_cross_validate_models()
+    return test_make_predictions()
 
 
 if __name__ == '__main__':
@@ -11,7 +11,6 @@ if __name__ == '__main__':
 '''
 TO-DO
 
-1. Remove Randomness and Set Seeds
 2. Optimize Catboost LR and dpeth
 3. Add XGBoost Model
 4. Add TABPFN Model
@@ -19,4 +18,13 @@ TO-DO
 6. 
 
 
+'''
+
+'''
+data being fully cleaned
+no bugs
+
+
+
+tabpfn
 '''
