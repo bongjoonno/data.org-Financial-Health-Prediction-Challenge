@@ -1,5 +1,5 @@
 from imports import np, CatBoostClassifier
-from constants import RANDOM_SEED, EARLY_STOPPING_ROUNDS
+from constants import RANDOM_SEED, EARLY_STOPPING_ROUNDS, LOSS_FUNCTION
 
 model_packages = [
         {'using_test_set': False, 
@@ -16,20 +16,20 @@ model_packages = [
 ]
 
 prediction_packages = [
-        {'model' : CatBoostClassifier(iterations=261,
-                                             learning_rate=np.float64(0.06842646032095057),
+        {'model' : CatBoostClassifier(iterations=245,
+                                             learning_rate=np.float64(0.0732020742417224),
                                              early_stopping_rounds=EARLY_STOPPING_ROUNDS,
                                              depth=6,
-                                             loss_function='MultiClass',
+                                             loss_function=LOSS_FUNCTION,
                                              verbose=0,
                                              random_seed=RANDOM_SEED,
                                              thread_count=1),
          'using_test_set': True, 
          'one_hot_encode_categoricals': True, 
          'scale_x' : True, 
-         'thresholds' : [np.float64(0.32653061224489793), 
-                         np.float64(0.44897959183673464), 
-                         np.float64(0.26530612244897955)],
+         'thresholds' :  [np.float64(0.42857142857142855), 
+                          np.float64(0.5102040816326531), 
+                          np.float64(0.3469387755102041)],
          },
         
 ]

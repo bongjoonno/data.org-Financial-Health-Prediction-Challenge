@@ -1,5 +1,5 @@
 from imports import np, f1_score, CatBoostClassifier
-from constants import RANDOM_SEED, MAX_EPOCHS, DEFAULT_LR, EARLY_STOPPING_ROUNDS, DEFAULT_TREE_DEPTH, LEARNING_RATES, EVAL_METRIC
+from constants import RANDOM_SEED, MAX_EPOCHS, DEFAULT_LR, EARLY_STOPPING_ROUNDS, DEFAULT_TREE_DEPTH, LEARNING_RATES, LOSS_FUNCTION, EVAL_METRIC
 
 from src.data_prep import clean_data, train_df, split_data_k_folds, scale_data
 from src.prediction_creation import make_preds_with_thresholds
@@ -28,7 +28,7 @@ class HyperParamOptimizer:
                                        learning_rate=lr,
                                        early_stopping_rounds=EARLY_STOPPING_ROUNDS,
                                        depth=DEFAULT_TREE_DEPTH,
-                                       loss_function='MultiClass',
+                                       loss_function=LOSS_FUNCTION,
                                        eval_metric=EVAL_METRIC,
                                        verbose=0,
                                        random_seed=RANDOM_SEED,
@@ -53,7 +53,7 @@ class HyperParamOptimizer:
                                        learning_rate=lr,
                                        early_stopping_rounds=EARLY_STOPPING_ROUNDS,
                                        depth=DEFAULT_TREE_DEPTH,
-                                       loss_function='MultiClass',
+                                       loss_function=LOSS_FUNCTION,
                                        eval_metric=EVAL_METRIC,
                                        verbose=0,
                                        random_seed=RANDOM_SEED,
@@ -95,7 +95,7 @@ class HyperParamOptimizer:
                                                  learning_rate=best_lr,
                                                  early_stopping_rounds=EARLY_STOPPING_ROUNDS,
                                                  depth=depth,
-                                                 loss_function='MultiClass',
+                                                 loss_function=LOSS_FUNCTION,
                                                  eval_metric=EVAL_METRIC,
                                                  verbose=0,
                                                  random_seed=RANDOM_SEED,
@@ -130,7 +130,7 @@ class HyperParamOptimizer:
                                              learning_rate=best_lr,
                                              early_stopping_rounds=EARLY_STOPPING_ROUNDS,
                                              depth=best_tree_depth,
-                                             loss_function='MultiClass',
+                                             loss_function=LOSS_FUNCTION,
                                              eval_metric=EVAL_METRIC,
                                              verbose=0,
                                              random_seed=RANDOM_SEED,
