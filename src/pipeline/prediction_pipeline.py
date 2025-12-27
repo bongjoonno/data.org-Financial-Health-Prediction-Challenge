@@ -1,5 +1,5 @@
 from imports import np, pd, Path
-from constants import DEFAULT_THRESHOLDS
+from constants import DEFAULT_THRESHOLDS, NUM_TO_STRING_TARGET
 from src.data_prep import clean_data, scale_data, train_df, test_df
 from src.prediction_creation import make_preds_with_thresholds
 
@@ -10,6 +10,7 @@ class PredictionPipeline:
     @staticmethod
     def make_testing_preds(model_package: dict):
         y_preds = pd.Series(PredictionPipeline.train_and_make_preds(model_package))
+        y_preds = y_preds.map(NUM_TO_STRING_TARGET)
         preds_dataframe = pd.DataFrame({'ID' : test_df['ID'], 
                                         'Target' : y_preds})
 

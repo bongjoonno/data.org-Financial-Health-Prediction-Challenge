@@ -1,5 +1,8 @@
 from imports import Path
 
+STRING_TO_NUM_TARGET = {'Low' : 0, 'Medium' : 1, 'High' : 2}
+NUM_TO_STRING_TARGET = {v: k for k, v in STRING_TO_NUM_TARGET.items()}
+
 DATA_PATH = Path(r'D:\code\repos\data.org-Financial-Health-Prediction-Challenge\data')
 RANDOM_SEED = 42
 MAX_EPOCHS = 5_000

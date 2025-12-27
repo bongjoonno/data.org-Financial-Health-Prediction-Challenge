@@ -1,4 +1,5 @@
 from imports import pd
+from constants import STRING_TO_NUM_TARGET
 
 def clean_data(df, one_hot_encode_categoricals: bool = True, using_test_set: bool = False):
   df = df.copy()
@@ -100,6 +101,6 @@ def clean_data(df, one_hot_encode_categoricals: bool = True, using_test_set: boo
         df[column] = df[column].astype('category').cat.codes
   
   if not using_test_set:
-    df['Target'] = df['Target'].map({'Low' : 0, 'Medium' : 1, 'High' : 2})
+    df['Target'] = df['Target'].map(STRING_TO_NUM_TARGET)
 
   return df
