@@ -1,13 +1,21 @@
-from imports import np, pd
+from imports import np, pd, Path
 from constants import DEFAULT_THRESHOLDS
 from src.data_prep import clean_data, scale_data, train_df, test_df
 from src.prediction_creation import make_preds_with_thresholds
 
 test_df_no_id = test_df.drop(columns='ID')
+preds_path = Path(r'D:\code\repos\data.org-Financial-Health-Prediction-Challenge\preds')
 
 class PredictionPipeline:
     @staticmethod
-    def make_predictions(model_package: dict):
+    def make_testing_preds(model_package: dict):
+        preds = PredictionPipeline.train_and_make_preds(model_package)
+        preds_file_name = input('enter file name: ')
+        
+        preds.to_csv('D:\code\repos\data.org-Financial-Health-Prediction-Challenge\preds' / preds_file_name, index=False)
+        
+    @staticmethod   
+    def train_and_make_preds(model_package: dict):
         model = model_package['model']
         using_test_set = model_package['using_test_set']
         one_hot_encode_categoricals = model_package['one_hot_encode_categoricals']
@@ -28,7 +36,7 @@ class PredictionPipeline:
         
         y_pred = model.predict(x_test, prediction_type='Probability')
 
-        y_pred = make_preds_with_thresholds(y_pred, thresholds) 
+        y_pred = pd.Series(make_preds_with_thresholds(y_pred, thresholds)) 
         
-        results = pd.concat([test_df['ID'], y_pred])
+        results = pd.concat([test_df['ID'], y_pred], ignore_index=True)
         return results

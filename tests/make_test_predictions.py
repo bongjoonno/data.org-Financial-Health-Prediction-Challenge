@@ -7,5 +7,5 @@ def test_make_predictions():
     pipeline = PredictionPipeline()
     
     for package in prediction_packages:
-        pipeline.make_predictions(package)
+        pipeline.make_testing_preds(package)
         
