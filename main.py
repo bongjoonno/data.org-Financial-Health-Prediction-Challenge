@@ -1,7 +1,7 @@
-from tests import test_cross_validate_models
+from tests import test_cross_validate_models, test_make_predictions
 
 def main():
-    return test_cross_validate_models()
+    return test_make_predictions()
 
 
 if __name__ == '__main__':

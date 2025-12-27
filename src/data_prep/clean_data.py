@@ -1,6 +1,6 @@
 from imports import pd
 
-def clean_data(df, one_hot_encode_categoricals: bool = True):
+def clean_data(df, one_hot_encode_categoricals: bool = True, using_test_set: bool = False):
   df = df.copy()
   df['attitude_stable_business_environment'] = df['attitude_stable_business_environment'].fillna('Don’t know or N/A')
 
@@ -99,7 +99,7 @@ def clean_data(df, one_hot_encode_categoricals: bool = True):
       if df[column].dtype == object and column not in ['Target', 'ID']:
         df[column] = df[column].astype('category').cat.codes
   
-
-  df['Target'] = df['Target'].map({'Low' : 0, 'Medium' : 1, 'High' : 2})
+  if not using_test_set:
+    df['Target'] = df['Target'].map({'Low' : 0, 'Medium' : 1, 'High' : 2})
 
   return df

@@ -1,5 +1,5 @@
 from imports import np, f1_score, CatBoostClassifier
-from constants import RANDOM_SEED, MAX_EPOCHS, DEFAULT_LR, EARLY_STOPPING_ROUNDS, DEFAULT_TREE_DEPTH
+from constants import RANDOM_SEED, MAX_EPOCHS, DEFAULT_LR, EARLY_STOPPING_ROUNDS, DEFAULT_TREE_DEPTH, DEFAULT_THRESHOLDS
 from src.data_prep import clean_data, train_df, split_data_k_folds, scale_data
 from src.prediction_creation import make_preds_with_thresholds
 from src.optimizers import HyperParamOptimizer
@@ -29,7 +29,7 @@ class CrossValPipeline:
         best_epochs = model_package.get('best_epochs', MAX_EPOCHS)
         best_lr = model_package.get('best_lr', DEFAULT_LR)
         best_tree_depth = model_package.get('best_tree_depth', DEFAULT_TREE_DEPTH)
-        thresholds = model_package.get('thresholds', [0.5, 0.5, 0.5])
+        thresholds = model_package.get('thresholds', DEFAULT_THRESHOLDS)
         
         optimized_model = CatBoostClassifier(iterations=best_epochs,
                                              learning_rate=best_lr,
