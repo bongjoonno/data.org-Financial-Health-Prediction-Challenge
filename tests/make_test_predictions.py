@@ -9,4 +9,3 @@ def test_make_predictions():
     for package in prediction_packages:
         pipeline.make_testing_preds(package)
         break
-        

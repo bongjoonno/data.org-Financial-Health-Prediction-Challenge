@@ -14,23 +14,15 @@ model_packages = [
          'thresholds' : None,
          },
         
-        {
-         'model' : TabPFNClassifier(),
-         'one_hot_encode_categoricals': False, 
-         'scale_x' : False, 
-         'optimize_epochs_and_lr' : False,
-         'optimize_tree_depth' : False,
-         'optimize_thresh' : False,
-         'best_epochs' : None,
-         'best_lr' : None,
-         'best_tree_depth': None,
-         'thresholds' : None,
-         },
-        
-        
 ]
 
 prediction_packages = [
+        {'model' : TabPFNClassifier(device='cpu'),
+         'using_test_set' : True,
+         'one_hot_encode_categoricals' : False,
+         'scale_x' : False,
+         'thresholds' : None},
+        
         {'model' : CatBoostClassifier(iterations=187,
                                              learning_rate=np.float64(0.09093294700385743),
                                              early_stopping_rounds=EARLY_STOPPING_ROUNDS,
@@ -45,6 +37,6 @@ prediction_packages = [
          'thresholds' :  [np.float64(0.36734693877551017), 
                           np.float64(0.4693877551020408), 
                           np.float64(0.3469387755102041)],
-         },
+         }
         
 ]

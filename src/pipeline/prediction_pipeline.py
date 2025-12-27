@@ -1,4 +1,4 @@
-from imports import np, pd, Path
+from imports import np, pd, Path, CatBoostClassifier, TabPFNClassifier
 from constants import DEFAULT_THRESHOLDS, NUM_TO_STRING_TARGET
 from src.data_prep import clean_data, scale_data, train_df, test_df
 from src.prediction_creation import make_preds_with_thresholds
@@ -40,8 +40,12 @@ class PredictionPipeline:
            
         model.fit(x_train, y_train)
         
-        y_pred = model.predict(x_test, prediction_type='Probability')
+        if isinstance(model, CatBoostClassifier):
+            y_pred = model.predict(x_test, prediction_type='Probability')
 
-        y_pred = make_preds_with_thresholds(y_pred, thresholds)
+            y_pred = make_preds_with_thresholds(y_pred, thresholds)
+        elif isinstance(model, TabPFNClassifier):
+            y_pred = model.predict(x_test)
+            
         
         return y_pred
