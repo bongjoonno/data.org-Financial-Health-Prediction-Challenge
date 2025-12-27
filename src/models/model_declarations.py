@@ -1,8 +1,8 @@
-from imports import np, CatBoostClassifier
+from imports import np, CatBoostClassifier, TabPFNClassifier
 from constants import RANDOM_SEED, EARLY_STOPPING_ROUNDS, LOSS_FUNCTION
 
 model_packages = [
-        {'using_test_set': False, 
+        {'using_test_set': False, #catboost
          'one_hot_encode_categoricals': True, 
          'scale_x' : True, 
          'optimize_epochs_and_lr' : True,
@@ -13,6 +13,21 @@ model_packages = [
          'best_tree_depth': None,
          'thresholds' : None,
          },
+        
+        {
+         'model' : TabPFNClassifier(),
+         'one_hot_encode_categoricals': False, 
+         'scale_x' : False, 
+         'optimize_epochs_and_lr' : False,
+         'optimize_tree_depth' : False,
+         'optimize_thresh' : False,
+         'best_epochs' : None,
+         'best_lr' : None,
+         'best_tree_depth': None,
+         'thresholds' : None,
+         },
+        
+        
 ]
 
 prediction_packages = [
