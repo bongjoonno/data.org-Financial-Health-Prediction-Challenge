@@ -1,1 +1,2 @@
 from .cross_validation_pipeline import CrossValPipeline
+from .prediction_pipeline import PredictionPipeline

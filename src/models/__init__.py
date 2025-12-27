@@ -1,1 +1,1 @@
-from .model_declarations import model_packages
+from .model_declarations import model_packages, prediction_packages
