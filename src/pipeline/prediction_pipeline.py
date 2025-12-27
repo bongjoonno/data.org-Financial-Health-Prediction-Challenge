@@ -12,7 +12,7 @@ class PredictionPipeline:
         preds = PredictionPipeline.train_and_make_preds(model_package)
         preds_file_name = input('enter file name: ')
         
-        preds.to_csv(preds_path / preds_file_name / '.csv', index=False)
+        preds.to_csv(preds_path / preds_file_name + '.csv', index=False)
         
     @staticmethod   
     def train_and_make_preds(model_package: dict):
