@@ -16,10 +16,10 @@ model_packages = [
 ]
 
 prediction_packages = [
-        {'model' : CatBoostClassifier(iterations=245,
-                                             learning_rate=np.float64(0.0732020742417224),
+        {'model' : CatBoostClassifier(iterations=187,
+                                             learning_rate=np.float64(0.09093294700385743),
                                              early_stopping_rounds=EARLY_STOPPING_ROUNDS,
-                                             depth=6,
+                                             depth=8,
                                              loss_function=LOSS_FUNCTION,
                                              verbose=0,
                                              random_seed=RANDOM_SEED,
@@ -27,8 +27,8 @@ prediction_packages = [
          'using_test_set': True, 
          'one_hot_encode_categoricals': True, 
          'scale_x' : True, 
-         'thresholds' :  [np.float64(0.42857142857142855), 
-                          np.float64(0.5102040816326531), 
+         'thresholds' :  [np.float64(0.36734693877551017), 
+                          np.float64(0.4693877551020408), 
                           np.float64(0.3469387755102041)],
          },
         
