@@ -1,7 +1,7 @@
 from tests import test_cross_validate_models, test_make_predictions
 
 def main():
-    return test_make_predictions()
+    return test_cross_validate_models()
 
 
 if __name__ == '__main__':
@@ -18,4 +18,13 @@ TO-DO
 6. 
 
 
+'''
+
+'''
+data being fully cleaned
+no bugs
+
+
+
+tabpfn
 '''
