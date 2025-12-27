@@ -9,10 +9,15 @@ preds_path = Path(r'D:\code\repos\data.org-Financial-Health-Prediction-Challenge
 class PredictionPipeline:
     @staticmethod
     def make_testing_preds(model_package: dict):
-        preds = PredictionPipeline.train_and_make_preds(model_package)
-        preds_file_name = input('enter file name: ')
+        y_preds = pd.Series(PredictionPipeline.train_and_make_preds(model_package))
+        preds_dataframe = pd.DataFrame({'ID' : test_df['ID'], 
+                                        'Target' : y_preds})
+
+    
+        preds_actual_path = preds_path / input('enter file name: ')
+        preds_actual_path = preds_actual_path.with_suffix('.csv')
         
-        preds.to_csv(preds_path / preds_file_name + '.csv', index=False)
+        preds_dataframe.to_csv(preds_actual_path, index=False)
         
     @staticmethod   
     def train_and_make_preds(model_package: dict):
@@ -36,7 +41,6 @@ class PredictionPipeline:
         
         y_pred = model.predict(x_test, prediction_type='Probability')
 
-        y_pred = pd.Series(make_preds_with_thresholds(y_pred, thresholds)) 
+        y_pred = make_preds_with_thresholds(y_pred, thresholds)
         
-        results = pd.concat([test_df['ID'], y_pred], ignore_index=True)
-        return results
+        return y_pred
